@@ -1,25 +1,60 @@
-import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
-
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
-
 function ExpenseChart({ expenses }) {
-  const data = expenses.reduce((acc, e) => {
-    const found = acc.find((item) => item.name === e.category);
-    if (found) found.value += e.amount;
-    else acc.push({ name: e.category, value: e.amount });
+  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+  
+  const data = expenses.reduce((acc, expense) => {
+    const found = acc.find(item => item.name === expense.category);
+    if (found) found.value += expense.amount;
+    else acc.push({ name: expense.category, value: expense.amount });
     return acc;
-  }, []);
+  }, []).slice(0, 5); // Top 5 categories
+
+  if (totalExpenses === 0 || data.length === 0) {
+    return (
+      <div className="w-full h-[300px] flex items-center justify-center bg-white/10 rounded-2xl">
+        <div className="text-center text-white/60">
+          <div className="text-6xl mb-4">📊</div>
+          <p className="text-lg">No data available</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <PieChart width={400} height={300}>
-      <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={100} label>
-        {data.map((_, i) => (
-          <Cell key={i} fill={COLORS[i % COLORS.length]} />
-        ))}
-      </Pie>
-      <Tooltip />
-      <Legend />
-    </PieChart>
+    <div className="w-full h-[300px] flex items-center justify-center">
+      <svg viewBox="0 0 200 200" className="w-64 h-64">
+        {data.map((entry, index) => {
+          const percentage = (entry.value / totalExpenses) * 100;
+          const radius = 80;
+          const circumference = 2 * Math.PI * radius;
+          const offset = circumference - (percentage / 100) * circumference;
+
+          return (
+            <circle
+              key={entry.name}
+              cx="100"
+              cy="100"
+              r={radius}
+              fill="none"
+              stroke={`hsl(${index * 60}, 70%, 50%)`}
+              strokeWidth="25"
+              strokeDasharray={`${circumference} ${circumference}`}
+              strokeDashoffset={offset}
+              strokeLinecap="round"
+              className="transform -rotate-90 origin-center transition-all duration-1000"
+              style={{ animationDelay: `${index * 0.1}s` }}
+            />
+          );
+        })}
+        <circle
+          cx="100"
+          cy="100"
+          r="75"
+          fill="none"
+          stroke="rgba(255,255,255,0.2)"
+          strokeWidth="25"
+        />
+      </svg>
+    </div>
   );
 }
 
