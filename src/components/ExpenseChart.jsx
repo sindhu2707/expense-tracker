@@ -1,4 +1,4 @@
-function ExpenseChart({ expenses }) {
+function ExpenseChart({ expenses, onCategoryClick }) {
   const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
   
   const data = expenses.reduce((acc, expense) => {
@@ -29,20 +29,21 @@ function ExpenseChart({ expenses }) {
           const offset = circumference - (percentage / 100) * circumference;
 
           return (
-            <circle
-              key={entry.name}
-              cx="100"
-              cy="100"
-              r={radius}
-              fill="none"
-              stroke={`hsl(${index * 60}, 70%, 50%)`}
-              strokeWidth="25"
-              strokeDasharray={`${circumference} ${circumference}`}
-              strokeDashoffset={offset}
-              strokeLinecap="round"
-              className="transform -rotate-90 origin-center transition-all duration-1000"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            />
+            <g key={entry.name} onClick={() => onCategoryClick(entry.name)} className="cursor-pointer group">
+              <circle
+                cx="100"
+                cy="100"
+                r={radius}
+                fill="none"
+                stroke={`hsl(${index * 60}, 70%, 50%)`}
+                strokeWidth="25"
+                strokeDasharray={`${circumference} ${circumference}`}
+                strokeDashoffset={offset}
+                strokeLinecap="round"
+                className="transform -rotate-90 origin-center transition-all duration-1000 group-hover:opacity-80"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              />
+            </g>
           );
         })}
         <circle
@@ -54,6 +55,24 @@ function ExpenseChart({ expenses }) {
           strokeWidth="25"
         />
       </svg>
+
+      {/* Legend */}
+      <div className="flex flex-wrap gap-3 justify-center mt-6">
+        {data.map((entry, index) => (
+          <button
+            key={entry.name}
+            onClick={() => onCategoryClick(entry.name)}
+            className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded-full transition-all text-sm"
+          >
+            <span
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: `hsl(${index * 60}, 70%, 50%)` }}
+            />
+            <span className="text-gray-300 font-semibold">{entry.name}</span>
+            <span className="text-gray-500">${entry.value.toFixed(0)}</span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }

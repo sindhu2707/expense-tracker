@@ -111,3 +111,12 @@ button {
 
 button:nth-of-type(2) { background: #dc3545; color: white; } /* Delete red */
 
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.25s ease forwards;
+  opacity: 0;
+}
+
