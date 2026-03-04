@@ -14,6 +14,9 @@ A full-stack expense tracking web app built with React, Node.js, Express, and Po
 - Multi-currency support with live conversion
 - Profile settings (username, password, delete account)
 
+## Live Demo
+https://expense-tracker-phi-two-60.vercel.app/
+
 ## Tech Stack
 
 **Frontend:** React, Vite, Tailwind CSS, Framer Motion, Recharts  
