@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3001/api'
+const BASE_URL = 'https://expense-tracker-backend-vsi8.onrender.com/api'
 
 // Helper to get token from localStorage
 const getToken = () => localStorage.getItem('token')

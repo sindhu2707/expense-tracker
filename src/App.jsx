@@ -101,6 +101,7 @@ function App() {
   }, [currentMonth, viewMode, showForm]);
 
   useEffect(() => {
+    if (!user) return
     const loadData = async () => {
       try {
         const [expensesData, budgetsData, goalsData] = await Promise.all([
